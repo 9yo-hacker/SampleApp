@@ -1,0 +1,14 @@
+﻿using SampleApp.API.Entities;
+
+namespace SampleApp.API.Interfaces
+{
+    public interface IUserRepository
+    {
+        User CreateUser(User user);
+        List<User> GetUsers();
+        User EditUser(User user, int id);
+        User DeleteUser(int id);
+        User FindUserById(int id);
+
+    }
+}

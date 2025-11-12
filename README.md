@@ -16,7 +16,7 @@
 ## Запуск
 1. Клонировать репозиторий:
 ```bash
-git clone https://github.com/username/project-name.git
+git clone https://github.com/9yo-hacker/SampleApp.git
 ```
 2. В командной строке выполнит:
 ```bash

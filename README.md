@@ -29,7 +29,7 @@ SampleApp — небольшой клон Twitter с простым API и фр�
 cd SampleApp/SampleApp.API
 ```
 ```bash
-dotnet run
+dotnet watch run --launch-profile "https"
 ```
 API будет доступно по адресу: https://localhost:7293
 

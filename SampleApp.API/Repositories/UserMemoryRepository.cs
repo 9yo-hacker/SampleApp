@@ -5,7 +5,11 @@ namespace SampleApp.API.Repositories
 {
     public class UserMemoryRepository : IUserRepository
     {
-        public IList<User> Users { get; set; } = new List<User>();
+        public IList<User> Users { get; set; } = new List<User>
+        {
+            new User { Id = 1, Name = "Alice" },
+            new User { Id = 2, Name = "Bob" },
+        };
 
         public  User CreateUser(User user)
         {

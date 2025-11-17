@@ -34,4 +34,4 @@ D:\SampleApp\SampleApp.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\SampleApp\SampleApp.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\SampleApp\SampleApp.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\SampleApp\SampleApp.API\bin\Debug\net9.0\FluentValidation.dll
-D:\SampleApp\SampleApp.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+D:\SampleApp\SampleApp.API\obj\Debug\net9.0\SampleApp.API.sourcelink.json

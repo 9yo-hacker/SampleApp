@@ -6,7 +6,7 @@ using SampleApp.API.Validations;
 namespace SampleApp.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v1/[controller]")]
     public class RoleController : ControllerBase
     {
         private readonly IRoleRepository _repo;

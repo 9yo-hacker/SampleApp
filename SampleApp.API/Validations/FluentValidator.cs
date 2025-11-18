@@ -7,7 +7,7 @@ namespace SampleApp.API.Validations
     {
         public FluentValidator()
         {
-            RuleFor(u => u.Name)
+            RuleFor(u => u.Login)
                 .Must(StartsWithCapitalLetter)
                 .WithMessage("Имя пользователя должно начинаться с заглавной буквы");
         }

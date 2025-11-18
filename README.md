@@ -1,52 +1,88 @@
 # SampleApp
 
-SampleApp — небольшой клон Twitter с простым API и фронтендом 
+SampleApp — это небольшой сервис для управления пользователями с Web API на ASP.NET Core и хранением данных в PostgreSQL.  
+
 ## Функционал
 
 - Создание, редактирование, получение и удаление пользователей  
-- Создание ролей и привязка их к пользователям  
-- Возврат корректных HTTP-кодов (200, 201, 404)  
-- Использование репозиторного паттерна и базовой валидации данных  
+- Хранение пароля в виде хэша и соли (HMACSHA256)  
+- Валидация данных пользователя (Login обязательное поле)  
+- Репозиторный паттерн с внедрением зависимостей (Dependency Injection)  
+- Генерация тестовых пользователей через SeedController и библиотеку Bogus  
+- Поддержка Swagger для тестирования API  
 
 ## Технологии
 
-- ASP.NET Core Web API  
-- Angular 20  
+- ASP.NET Core Web API (.NET 9)  
 - C#  
-- In-memory Singleton Repository  
+- Entity Framework Core + PostgreSQL  
+- Swagger  
+- Bogus (генерация тестовых данных)  
 
-## Запуск
+## Настройка проекта
 
-### Backend (API)
+1. **Клонируйте репозиторий:**
 
-1. Клонируйте репозиторий:  
 ```bash
-   git clone https://github.com/9yo-hacker/SampleApp.git
+git clone <ваш-репозиторий>
 ```
-Перейдите в папку проекта API и запустите:
-
 ```bash
 cd SampleApp/SampleApp.API
 ```
+2. Настройте строку подключения в appsettings.json:
+```json
+"ConnectionStrings": {
+  "PostgreSQL": "Host=localhost;Port=5432;Database=SampleAppCourse;Username=postgres;Password=<ваш_пароль>"
+}
+```
+
+3. Установите зависимости EF Core и Npgsql (если еще не установлены):
+
+```bash
+dotnet add package Microsoft.EntityFrameworkCore -v 9.0.0
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL -v 9.0.0
+dotnet add package Microsoft.EntityFrameworkCore.Tools -v 9.0.0
+dotnet add package Microsoft.EntityFrameworkCore.Design -v 9.0.0
+dotnet add package Bogus
+```
+
+4. Создайте и примените миграции:
+```bash
+dotnet ef migrations add Initial -s SampleApp.API -p SampleApp.API
+dotnet ef database update -s SampleApp.API -p SampleApp.API
+```
+
+5. Запустите приложение:
+
 ```bash
 dotnet watch run --launch-profile "https"
 ```
+
 API будет доступно по адресу: https://localhost:7293
 
-Frontend (Angular)
-Перейдите в папку Angular проекта:
+Работа с API
 
-```bash
-cd SampleApp/SampleApp.Angular
+-Создание пользователя: POST /api/users
+Входные данные: JSON в формате UserDto:
+```json
+{
+  "login": "alice123",
+  "password": "123456"
+}
 ```
-Установите зависимости:
 
-```bash
-npm install
-```
-Запустите Angular приложение:
-```bash
-ng serve
-```
-Откройте в браузере: https://localhost:4300
-Таблица с пользователями будет автоматически подгружаться с API.
+- Получение всех пользователей: GET /api/users
+
+- Редактирование пользователя: PUT /api/users/{id}
+
+- Удаление пользователя: DELETE /api/users/{id}
+
+- Генерация тестовых пользователей: GET /api/seed/generate
+
+Примечания
+
+- Пароли пользователей хранятся в виде хэша + соли (HMACSHA256).
+
+- Swagger доступен по адресу: https://localhost:7293/swagger для тестирования API.
+
+- SeedController генерирует 100 тестовых пользователей с случайными логинами и паролями.

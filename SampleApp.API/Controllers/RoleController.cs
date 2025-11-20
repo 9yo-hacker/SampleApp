@@ -7,6 +7,7 @@ namespace SampleApp.API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     public class RoleController : ControllerBase
     {
         private readonly IRoleRepository _repo;

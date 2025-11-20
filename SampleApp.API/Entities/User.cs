@@ -8,5 +8,6 @@ namespace SampleApp.API.Entities
     [StringLength(100, MinimumLength = 3)]    public required string Login {get; set;}
     public byte[] PasswordHash {get; set;} = Array.Empty<byte>();
     public byte[] PasswordSalt {get; set;} = Array.Empty<byte>();
+    public string Token {get; set;} = string.Empty;
     }
 }

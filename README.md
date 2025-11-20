@@ -24,7 +24,7 @@ SampleApp — это небольшой сервис для управления
 1. **Клонируйте репозиторий:**
 
 ```bash
-git clone git push origin master
+git clone <ваш-репозиторий>
 ```
 ```bash
 cd SampleApp/SampleApp.API

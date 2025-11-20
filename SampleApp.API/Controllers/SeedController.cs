@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Bogus;
 using SampleApp.API.Dto;
 using SampleApp.API.Entities;
-using SampleApp.API.Data; 
+using SampleApp.API.Data;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -11,10 +11,12 @@ using System.Text;
 public class SeedController : ControllerBase
 {
     private readonly SampleAppContext _db;
+    private readonly ITokenService _tokenService;
 
-    public SeedController(SampleAppContext db)
+    public SeedController(SampleAppContext db, ITokenService tokenService)
     {
         _db = db;
+        _tokenService = tokenService;
     }
 
     [HttpGet("generate")]
@@ -50,7 +52,8 @@ public class SeedController : ControllerBase
                     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(user.Password)),
                     PasswordSalt = hmac.Key,
                     CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
+                    UpdatedAt = DateTime.UtcNow,
+                    Token = _tokenService.CreateToken(user.Login)
                 };
                 userToDb.Add(u);
             }
@@ -59,7 +62,7 @@ public class SeedController : ControllerBase
         }
         catch (Exception ex)
         {
-            // на учебном проекте можно логировать в консоль
+            //можно логировать в консоль
             Console.WriteLine(ex.InnerException?.Message ?? ex.Message);
             return Problem(detail: ex.Message);
         }

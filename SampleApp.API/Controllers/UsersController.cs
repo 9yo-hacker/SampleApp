@@ -9,16 +9,37 @@ using SampleApp.API.Validations;
 namespace SampleApp.API.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _repo;
+        private readonly ITokenService _tokenService;
         private readonly HMACSHA256 _hmac = new HMACSHA256();
-        public UsersController(IUserRepository repo)
+        public UsersController(IUserRepository repo, ITokenService tokenService)
         {
             _repo = repo;
+            _tokenService = tokenService;
         }
-        
+        [HttpPost("login")]
+        public ActionResult Login([FromBody] UserDto userDto)
+        {
+            try
+            {
+                var user = _repo.GetUsers()
+                    .FirstOrDefault(u => u.Login.ToLower() == userDto.Login.ToLower());
+
+                if (user == null)
+                    return Unauthorized("Неверный логин");
+
+                user.Token = _tokenService.CreateToken(user.Login);
+
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
         [HttpPost]
         public ActionResult<User> Create([FromBody] UserDto userDto)
         {
@@ -28,7 +49,8 @@ namespace SampleApp.API.Controllers
             PasswordHash = _hmac.ComputeHash(Encoding.UTF8.GetBytes(userDto.Password)),
             PasswordSalt = _hmac.Key,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
+            Token = _tokenService.CreateToken(userDto.Login)
         };
 
             var validator = new FluentValidator();

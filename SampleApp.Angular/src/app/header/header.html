@@ -1,0 +1,20 @@
+<mat-toolbar color="primary">
+@if(authService.currentUser() != null){
+  <button mat-button [routerLink] = "['/']" >
+    <mat-icon>
+      home
+    </mat-icon>
+  </button>
+  <button mat-button [routerLink] = "['/users']">
+      <mat-icon>
+          people
+      </mat-icon>
+  </button>
+    <button mat-button type="button">
+      <mat-icon>
+        logout
+      </mat-icon>
+
+    </button>
+  }
+</mat-toolbar>

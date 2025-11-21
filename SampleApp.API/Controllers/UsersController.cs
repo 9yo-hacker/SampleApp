@@ -21,25 +21,11 @@ namespace SampleApp.API.Controllers
             _repo = repo;
             _tokenService = tokenService;
         }
-        [HttpPost("login")]
-        public ActionResult Login([FromBody] UserDto userDto)
+        [HttpPost("Login")]
+        public ActionResult Login(UserDto userDto)
         {
-            try
-            {
-                var user = _repo.GetUsers()
-                    .FirstOrDefault(u => u.Login.ToLower() == userDto.Login.ToLower());
-
-                if (user == null)
-                    return Unauthorized("Неверный логин");
-
-                user.Token = _tokenService.CreateToken(user.Login);
-
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+        var user = _repo.FindUserByLogin(userDto.Login);
+        return CheckPasswordHash(userDto, user);
         }
         [HttpPost]
         public ActionResult<User> Create([FromBody] UserDto userDto)
@@ -87,6 +73,22 @@ namespace SampleApp.API.Controllers
         public IActionResult FindUserById(int id)
         {
             return Ok(_repo.FindUserById(id));
+        }
+        private ActionResult CheckPasswordHash(UserDto userDto, User user)
+        {
+
+            using var hmac = new HMACSHA256(user.PasswordSalt);
+            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(userDto.Password));
+
+            for (int i = 0; i < computedHash.Length; i++)
+            {
+                if (computedHash[i] != user.PasswordHash[i])
+                {
+                    return Unauthorized($"Неправильный пароль");
+                }
+            }
+
+            return Ok(user);
         }
     }
 }

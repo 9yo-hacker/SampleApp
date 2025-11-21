@@ -2,6 +2,7 @@
 using SampleApp.API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using SampleApp.API.Data;
+using SampleApp.API.Dto;
 
 namespace SampleApp.API.Repositories
 {
@@ -47,6 +48,14 @@ namespace SampleApp.API.Repositories
             var result = _db.Users.FirstOrDefault(u => u.Id == id);
             if (result == null) 
                 throw new Exception($"Нет пользователя с id = {id}");
+
+            return result;
+        }
+        public User FindUserByLogin(string login)
+        {
+            var result = _db.Users.FirstOrDefault(u => u.Login == login);
+            if (result == null) 
+                throw new Exception($"Нет пользователя с login = {login}");
 
             return result;
         }
